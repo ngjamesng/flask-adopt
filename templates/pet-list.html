@@ -7,12 +7,16 @@
 {% block content %}
 
   {%for pet in pets%}
-
-  <img src="{{pet.photo_url}}" alt="">
-  <p>
-    <a href="/{{pet.id}}"></a>{{pet.name}} is {% if pet.available %}  
-    available  {%else%} not available {% endif %}
-  </p>
+  <a href="/{{pet.id}}">
+  <div class="pet">
+    <img class="pet-img" src="{{pet.photo_url}}" alt="">
+    <p>
+      {{pet.name}} is {% if pet.available %}  
+      available  {%else%} not available {% endif %}
+    </p>
+  </div>
+</a>
   {%endfor%}
-
+  <br class="clear">
+<a class="btn btn-primary" href="/add">Add pet!</a>
 {% endblock %}

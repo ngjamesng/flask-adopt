@@ -32,11 +32,10 @@ def show_add_pet_form():
     if form.validate_on_submit():
         name=form.name.data
         species=form.species.data
-        photo_url=form.photo_url.data
+        photo_url=form.photo_url.data 
         age=form.age.data
         notes=form.notes.data
-        available=form.available.data
-        pet = Pet(name=name, species=species, photo_url=photo_url, age=age, notes=notes, available=available)
+        pet = Pet(name=name, species=species, photo_url=photo_url, age=age, notes=notes)
         
         db.session.add(pet)
         db.session.commit()
@@ -49,3 +48,4 @@ def show_add_pet_form():
 
         return render_template("add-pet-form.html", form=form)
 
+@app.route("/<int:pet_id")
