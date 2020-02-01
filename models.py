@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, TextAreaField, RadioField
+from wtforms import StringField, FloatField, TextAreaField, BooleanField
 from wtforms.validators import InputRequired, Optional, URL, NumberRange
 
 db = SQLAlchemy()
@@ -28,11 +28,20 @@ class Pet(db.Model):
     available = db.Column(db.Boolean, default=True)
 
 
-class AddPetForm(FlaskForm):
+class PetForm(FlaskForm):
+    """pet form for adding"""
 
     name = StringField("Pet name", validators=[InputRequired()])
     species = StringField("Species", validators=[InputRequired()])
     photo_url = StringField("Photo URL", validators=[InputRequired(), URL()])
     age = FloatField("Age", validators=[NumberRange(min=0.1, max=130, message="your pet must be 0-130")])
     notes = TextAreaField("Notes about pet", validators=[Optional()])
+    available = BooleanField("available", default=True)
 
+
+class EditPetForm(FlaskForm):
+    """pet form for editing photo, notes, and availability"""
+
+    photo_url = photo_url = StringField("Photo URL", validators=[InputRequired(), URL()])
+    notes = TextAreaField("Notes about pet", validators=[Optional()])
+    available = BooleanField("available", default=True)

@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, render_template, flash
-from models import db, connect_db, Pet, AddPetForm
+from models import db, connect_db, Pet, PetForm, EditPetForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, TextAreaField, RadioField
@@ -26,17 +26,17 @@ def show_pet_listing():
 
 @app.route("/add", methods=["GET", "POST"])
 def show_add_pet_form():
-
-    form = AddPetForm()
+    """show add pet form"""
+    form = PetForm()
 
     if form.validate_on_submit():
-        name=form.name.data
-        species=form.species.data
-        photo_url=form.photo_url.data 
-        age=form.age.data
-        notes=form.notes.data
+        name = form.name.data
+        species = form.species.data
+        photo_url = form.photo_url.data
+        age = form.age.data
+        notes = form.notes.data
         pet = Pet(name=name, species=species, photo_url=photo_url, age=age, notes=notes)
-        
+
         db.session.add(pet)
         db.session.commit()
 
@@ -48,5 +48,20 @@ def show_add_pet_form():
 
         return render_template("add-pet-form.html", form=form)
 
-@app.route("/<int:pet_id>")
-def 
+
+@app.route("/<int:pet_id>", methods=["GET", "POST"])
+def show_pet_page(pet_id):
+    """show pet page"""
+
+    pet = Pet.query.get_or_404(pet_id)
+    form = EditPetForm(obj=pet)
+
+    if form.validate_on_submit():
+
+        pet.photo_url = form.photo_url.data
+        pet.notes = form.notes.data
+        pet.available = form.available.data
+
+        db.session.commit()
+
+    return render_template("display-pet.html", pet=pet, form=form)
